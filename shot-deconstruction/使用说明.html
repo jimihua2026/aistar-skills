@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>镜头解构 Skill｜使用说明</title>
+  <style>
+    :root {
+      --ink: #18232d;
+      --muted: #5d6b78;
+      --line: #dce3e8;
+      --paper: #f4f2ec;
+      --card: #fffdfa;
+      --navy: #163247;
+      --teal: #0f766e;
+      --teal-soft: #e4f4f1;
+      --amber: #b6671d;
+      --amber-soft: #fff1db;
+      --blue-soft: #e8f1f7;
+      --shadow: 0 18px 50px rgba(22, 50, 71, 0.10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 4%, rgba(15, 118, 110, 0.11), transparent 28rem),
+        radial-gradient(circle at 92% 18%, rgba(182, 103, 29, 0.10), transparent 24rem),
+        var(--paper);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      line-height: 1.72;
+    }
+
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "SFMono-Regular", monospace; }
+
+    .wrap {
+      width: min(1120px, calc(100% - 36px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(244, 242, 236, 0.92);
+      border-bottom: 1px solid rgba(22, 50, 71, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
+      min-height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 800;
+      color: var(--navy);
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      color: white;
+      background: linear-gradient(145deg, var(--navy), var(--teal));
+      box-shadow: 0 7px 18px rgba(15, 118, 110, 0.22);
+    }
+
+    nav {
+      display: flex;
+      gap: 18px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    nav::-webkit-scrollbar { display: none; }
+    nav a { text-decoration: none; color: var(--muted); font-size: 14px; white-space: nowrap; }
+    nav a:hover { color: var(--teal); }
+
+    .hero {
+      padding: 82px 0 56px;
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      color: var(--teal);
+      background: var(--teal-soft);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    h1, h2, h3 { color: var(--navy); line-height: 1.23; }
+    h1 { margin: 0; font-size: clamp(40px, 6vw, 72px); letter-spacing: -0.045em; }
+    h2 { margin: 0 0 12px; font-size: clamp(29px, 4vw, 43px); letter-spacing: -0.03em; }
+    h3 { margin: 0 0 9px; font-size: 19px; }
+
+    .hero-lead {
+      max-width: 760px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 19px;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 13px;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .button.primary { color: white; background: var(--teal); }
+    .button.secondary { color: var(--navy); background: rgba(255,255,255,0.72); border: 1px solid var(--line); }
+
+    .hero-panel {
+      padding: 26px;
+      border-radius: 26px;
+      color: white;
+      background: linear-gradient(155deg, #18364c, #0b665f);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-panel .label { color: rgba(255,255,255,0.66); font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; }
+    .hero-panel strong { display: block; margin: 8px 0 18px; font-size: 25px; line-height: 1.35; }
+    .hero-panel ul { margin: 0; padding-left: 1.2em; color: rgba(255,255,255,0.83); }
+    .version { margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.16); font-size: 13px; color: rgba(255,255,255,0.62); }
+
+    section { padding: 68px 0; scroll-margin-top: 72px; }
+
+    .section-head { max-width: 770px; margin-bottom: 30px; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 17px; }
+
+    .grid { display: grid; gap: 18px; }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+
+    .card {
+      padding: 25px;
+      border: 1px solid rgba(22, 50, 71, 0.11);
+      border-radius: var(--radius);
+      background: rgba(255, 253, 250, 0.88);
+      box-shadow: 0 9px 26px rgba(22, 50, 71, 0.055);
+    }
+
+    .card p { margin: 0; color: var(--muted); }
+    .num {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 17px;
+      border-radius: 12px;
+      color: white;
+      background: var(--teal);
+      font-weight: 900;
+    }
+
+    .callout {
+      margin-top: 20px;
+      padding: 20px 22px;
+      border-left: 5px solid var(--amber);
+      border-radius: 14px;
+      color: #67411c;
+      background: var(--amber-soft);
+    }
+
+    .codebox {
+      margin-top: 14px;
+      padding: 18px 20px;
+      overflow: auto;
+      border: 1px solid rgba(22, 50, 71, 0.12);
+      border-radius: 15px;
+      color: #dff7f4;
+      background: #122b3c;
+      white-space: pre-wrap;
+      line-height: 1.62;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+    }
+
+    th, td { padding: 17px 18px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    tr:last-child td { border-bottom: 0; }
+    th { color: var(--navy); background: var(--blue-soft); font-size: 14px; }
+    td { color: var(--muted); }
+    td:first-child { color: var(--ink); font-weight: 800; white-space: nowrap; }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      counter-reset: flow;
+    }
+
+    .flow-step {
+      position: relative;
+      min-height: 175px;
+      padding: 20px 18px;
+      border-radius: 18px;
+      color: var(--ink);
+      background: var(--card);
+      border: 1px solid var(--line);
+    }
+
+    .flow-step::before {
+      counter-increment: flow;
+      content: "0" counter(flow);
+      display: block;
+      margin-bottom: 20px;
+      color: var(--teal);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.10em;
+    }
+
+    .flow-step strong { display: block; margin-bottom: 7px; color: var(--navy); }
+    .flow-step span { color: var(--muted); font-size: 14px; }
+
+    .prompt-card { display: flex; flex-direction: column; }
+    .prompt-tag {
+      align-self: flex-start;
+      margin-bottom: 16px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--teal);
+      background: var(--teal-soft);
+    }
+
+    .prompt-card ul { padding-left: 1.2em; color: var(--muted); }
+    .prompt-card .codebox { flex: 1; }
+
+    .output-list { display: grid; gap: 12px; }
+    .output-item {
+      display: grid;
+      grid-template-columns: 155px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 19px 20px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: var(--card);
+    }
+
+    .output-item.primary-output { border-color: rgba(15,118,110,0.35); box-shadow: inset 4px 0 0 var(--teal); }
+    .filename { color: var(--navy); font-weight: 900; font-family: Consolas, monospace; }
+    .output-item p { margin: 0; color: var(--muted); }
+
+    .report-map {
+      display: grid;
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 0;
+      overflow: hidden;
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .report-shot {
+      min-height: 310px;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: rgba(255,255,255,0.72);
+      background: linear-gradient(145deg, #203849, #0e625c);
+      text-align: center;
+    }
+
+    .report-shot strong { display: block; margin-top: 12px; color: white; font-size: 24px; }
+    .report-copy { padding: 28px; }
+    .report-copy dl { margin: 0; }
+    .report-copy dt { margin-top: 18px; color: var(--navy); font-weight: 900; }
+    .report-copy dt:first-child { margin-top: 0; }
+    .report-copy dd { margin: 5px 0 0; color: var(--muted); }
+
+    details {
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--card);
+    }
+    details + details { margin-top: 10px; }
+    summary { cursor: pointer; color: var(--navy); font-weight: 900; }
+    details p { margin: 12px 0 0; color: var(--muted); }
+
+    .good-bad { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .good-bad .card:first-child { border-top: 5px solid var(--teal); }
+    .good-bad .card:last-child { border-top: 5px solid var(--amber); }
+    .good-bad ul { margin-bottom: 0; padding-left: 1.2em; color: var(--muted); }
+
+    footer {
+      margin-top: 40px;
+      padding: 34px 0 48px;
+      border-top: 1px solid rgba(22, 50, 71, 0.13);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; padding-top: 58px; }
+      .grid.three { grid-template-columns: 1fr; }
+      .grid.two, .good-bad { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr 1fr; }
+      .report-map { grid-template-columns: 1fr; }
+      .report-shot { min-height: 220px; }
+    }
+
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 24px, 1120px); }
+      .topbar-inner { align-items: flex-start; flex-direction: column; gap: 8px; padding: 10px 0; }
+      nav { width: 100%; padding-bottom: 3px; }
+      .hero { padding-top: 42px; }
+      .flow { grid-template-columns: 1fr; }
+      .output-item { grid-template-columns: 1fr; gap: 5px; }
+      table { display: block; overflow-x: auto; }
+      section { padding: 51px 0; }
+    }
+
+    @media print {
+      .topbar, .hero-actions { display: none; }
+      body { background: white; }
+      .card, .report-map, .hero-panel { box-shadow: none; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand"><span class="brand-mark">▶</span>镜头解构</div>
+      <nav aria-label="页面导航">
+        <a href="#quickstart">快速开始</a>
+        <a href="#input">输入</a>
+        <a href="#flow">流程</a>
+        <a href="#prompts">纯文字提示词</a>
+        <a href="#output">输出</a>
+        <a href="#versioning">版本更新</a>
+        <a href="#faq">常见问题</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">镜头解构 · 新手指南</div>
+        <h1>把参考视频，变成可复用的镜头提示词</h1>
+        <p class="hero-lead">这个 Skill 会观察参考视频、拆分镜头，并为每个镜头生成可独立使用的中文纯文字提示词。你优先通过图文版 <strong>analysis.html</strong> 对照截图查看结果。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#quickstart">从三步开始</a>
+          <a class="button secondary" href="#output">先看输出</a>
+        </div>
+      </div>
+      <aside class="hero-panel" aria-label="技能结果概览">
+        <div class="label">你会得到</div>
+        <strong>逐镜头截图 + 观察结果 + 纯文字提示词</strong>
+        <ul>
+          <li>纯文字复刻提示词</li>
+          <li>连续性与不确定项说明</li>
+          <li>HTML、Markdown、JSON 三种报告</li>
+        </ul>
+        <div class="version">Skill v1.2 · Output Schema v1.5</div>
+      </aside>
+    </div>
+
+    <section id="quickstart">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">QUICK START</div>
+          <h2>三步完成第一次解构</h2>
+          <p>不需要提前剪辑视频，也不需要自己抽帧。给出视频并说明目标即可。</p>
+        </div>
+        <div class="grid three">
+          <article class="card">
+            <div class="num">1</div>
+            <h3>提供参考视频</h3>
+            <p>上传视频附件，或提供当前运行环境可访问的本地视频路径。</p>
+          </article>
+          <article class="card">
+            <div class="num">2</div>
+            <h3>说明复现目标</h3>
+            <p>告诉 Codex 你希望复刻整条视频、某些镜头，还是主要提取运镜与导演语言。</p>
+          </article>
+          <article class="card">
+            <div class="num">3</div>
+            <h3>打开 HTML 报告</h3>
+            <p>优先查看 <code>analysis.html</code>，逐镜头对照截图并复制纯文字提示词使用。</p>
+          </article>
+        </div>
+        <div class="codebox" aria-label="调用示例">请使用“镜头解构”Skill 分析这个参考视频，拆分全部镜头，并为每个镜头生成纯文字复刻提示词。默认只分析画面，不需要分析音乐和旁白。</div>
+        <div class="callout"><strong>默认行为：</strong>不分析音乐和旁白。只有你明确提出“分析音乐、旁白、声音或声画关系”时，才会增加音频分析。</div>
+      </div>
+    </section>
+
+    <section id="input">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">INPUT</div>
+          <h2>需要提供什么</h2>
+          <p>只有参考视频是必需输入。其余信息越明确，交付越贴合你的后续生成方式。</p>
+        </div>
+        <table>
+          <thead>
+            <tr><th>输入</th><th>是否必需</th><th>作用</th><th>示例</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>参考视频</td><td>必需</td><td>用于识别镜头边界、主体、动作、运镜、构图和视觉风格。</td><td>MP4、MOV 等 FFmpeg 可读取的视频</td></tr>
+            <tr><td>复现范围</td><td>可选</td><td>指定分析整条视频，或只关注某一时间段、某几个镜头。</td><td>“只分析 00:08–00:15”</td></tr>
+            <tr><td>目标模型</td><td>可选</td><td>帮助调整提示词语言；不提供时输出通用中文视频生成描述。</td><td>Seedance 或其他视频生成模型</td></tr>
+            <tr><td>复现重点</td><td>可选</td><td>告诉 Skill 更关注人物动作、运镜、产品展示、光影或整体节奏。</td><td>“重点复刻环绕运镜和人物动作”</td></tr>
+            <tr><td>音频要求</td><td>可选</td><td>明确开启音乐、旁白或声画关系分析；默认关闭。</td><td>“同时分析旁白和剪辑踩点”</td></tr>
+            <tr><td>资产目录</td><td>可选</td><td>指定结果保存位置；未指定时写入当前工作区的资产目录。</td><td><code>video-deconstruction-assets/</code></td></tr>
+          </tbody>
+        </table>
+        <div class="good-bad" style="margin-top:18px">
+          <article class="card">
+            <h3>适合使用</h3>
+            <ul>
+              <li>拆解优秀 AI 短片的镜头语言</li>
+              <li>为单个镜头反推生成提示词</li>
+              <li>提取动作、运镜、构图和光影</li>
+              <li>沉淀可供其他 Agent 读取的镜头资产</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>不负责</h3>
+            <ul>
+              <li>保证找回原作者的原始 Prompt</li>
+              <li>自动策划新故事或撰写完整脚本</li>
+              <li>替你调用视频模型完成最终生成</li>
+              <li>默认识别音乐、旁白或具体歌曲版权</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">WORKFLOW</div>
+          <h2>Skill 内部会经历什么</h2>
+          <p>观察、镜头判断和提示词重构彼此分离，避免把猜测直接写成生成指令。</p>
+        </div>
+        <div class="flow">
+          <div class="flow-step"><strong>接收与预检</strong><span>确认视频可读取，记录文件名、哈希、时长、分辨率和帧率。</span></div>
+          <div class="flow-step"><strong>视频观察</strong><span>浏览全片，按动态复杂度抽取关键帧和必要的连续帧。</span></div>
+          <div class="flow-step"><strong>镜头拆分</strong><span>根据硬切、转场和画面结构变化判断最终镜头边界。</span></div>
+          <div class="flow-step"><strong>提示词重构</strong><span>按固定信息逻辑组织内容，再根据镜头动态复杂度压缩为自然语言导演指令。</span></div>
+          <div class="flow-step"><strong>报告交付</strong><span>生成 HTML、Markdown、JSON 和复用索引，供人和 Agent 使用。</span></div>
+        </div>
+        <div class="callout"><strong>关于高清素材：</strong>视频超过 1080p 或最长边超过 1920 像素时，Skill 会创建较小的分析代理来减少处理成本；原视频不会被修改。</div>
+      </div>
+    </section>
+
+    <section id="prompts">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">TEXT PROMPT</div>
+          <h2>纯文字提示词包含什么</h2>
+          <p>每个镜头只输出一种可独立使用的纯文字提示词。信息逻辑保持稳定，篇幅和时间表达随镜头复杂度变化。</p>
+        </div>
+        <div class="grid">
+          <article class="card prompt-card">
+            <div class="prompt-tag">纯文字复刻 · Text-to-Video</div>
+            <h3>固定逻辑，动态篇幅</h3>
+            <p>按“主体与核心动作、场景空间、动作时序、摄影机、光影风格、可选声音、稳定约束”组织，再压缩成自然语言，不机械显示标题。</p>
+            <ul><li>静态或微动作镜头简写为两至三句</li><li>标准动作使用“开始时、随后、最后”</li><li>复杂连续动作使用“触发、展开、完成”</li><li>稳定要求优先采用少量正向约束</li></ul>
+            <div class="codebox">夜晚便利店门口，一名穿米白色风衣的短发女性侧身站在玻璃门前。开始时，她的视线停留在画面外；随后先移动目光，再缓慢转头看向摄影机；最后正面注视镜头，动作自然减速并稳定停留。摄影机以平视中景缓慢推进，随着人物转头逐渐过渡到中近景，将注意力集中到她的表情。便利店内部的蓝绿色冷光穿过玻璃，背景形成柔和散景，浅景深、低饱和冷色调、真实商业摄影质感。保持人物面部、手部、发型、服装和便利店空间结构稳定。</div>
+          </article>
+        </div>
+        <table style="margin-top:20px">
+          <thead><tr><th>使用目标</th><th>处理方式</th></tr></thead>
+          <tbody>
+            <tr><td>只能输入文字</td><td>使用纯文字复刻提示词</td></tr>
+            <tr><td>只想借鉴导演语言，不复刻人物</td><td>编辑提示词中的主体和场景描述，保留动作、构图与运镜</td></tr>
+            <tr><td>希望加强动作或运镜</td><td>保留完整动作链，并明确速度、方向、景别变化和结束状态</td></tr>
+            <tr><td>镜头只有静态或微动作</td><td>保持简洁，不强行加入“开始、随后、最后”</td></tr>
+            <tr><td>镜头包含多个无关动作或竞争运镜</td><td>忠实保留观察，并标记“建议：分段生成或缩短生成单元”</td></tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>声音规则：</strong>只有明确要求音频分析并取得观察证据时，提示词才加入环境声、动作音效、人声或音乐；默认不臆造声音。</div>
+      </div>
+    </section>
+
+    <section id="output">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">OUTPUT</div>
+          <h2>会输出哪些文件</h2>
+          <p>四个文件位于同一个哈希资产目录中。HTML 是主要用户界面，其他文件分别服务于复制、自动化和复用。</p>
+        </div>
+        <div class="output-list">
+          <div class="output-item primary-output"><div class="filename">analysis.html</div><p><strong>最重要的用户交付。</strong>离线图文报告，逐镜头显示截图、观察摘要、纯文字提示词、连续性和不确定项。</p></div>
+          <div class="output-item"><div class="filename">analysis.md</div><p>纯文本审阅版，适合全文搜索、快速复制提示词，或放入知识库。</p></div>
+          <div class="output-item"><div class="filename">analysis.json</div><p>机器读取入口，保存精确时间、观察字段和纯文字提示词，供其他 Agent 或自动化流程使用。</p></div>
+          <div class="output-item"><div class="filename">manifest.json</div><p>复用索引，记录版本、创建时间、输入视频哈希和三个分析文件的路径。</p></div>
+        </div>
+        <div class="codebox" aria-label="输出目录示例">video-deconstruction-assets/
+  a1b2c3d4e5f6/
+    analysis.html
+    analysis.md
+    analysis.json
+    manifest.json</div>
+
+        <div class="report-map" aria-label="HTML 报告镜头卡片示意">
+          <div class="report-shot">镜头中点附近截图<strong>S01 · 00.00–05.00秒</strong></div>
+          <div class="report-copy">
+            <dl>
+              <dt>观察摘要</dt><dd>主体、场景、动作、构图、光线与镜头运动。</dd>
+              <dt>纯文字复刻提示词</dt><dd>不依赖源视频，可独立复制到文字生成入口。</dd>
+              <dt>连续性与不确定项</dt><dd>提示跨镜头应保持的状态，以及无法确认的判断。</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="audio">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">OPTIONAL AUDIO</div>
+          <h2>音频分析默认关闭</h2>
+          <p>视觉复现通常不需要完整转写音乐和旁白。只有明确提出要求时，Skill 才会提取相应音轨，并把声音观察写入三种报告。</p>
+        </div>
+        <div class="grid two">
+          <article class="card">
+            <h3>只分析画面</h3>
+            <div class="codebox">请拆解视频镜头并生成纯文字复刻提示词。只分析画面，不需要音乐和旁白。</div>
+          </article>
+          <article class="card">
+            <h3>同时分析声音</h3>
+            <div class="codebox">请拆解视频镜头并生成纯文字复刻提示词，同时分析背景音乐、旁白及它们与剪辑节奏的关系。</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="versioning">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">VERSION UPDATE</div>
+          <h2>版本与整包更新</h2>
+          <p>当前 Skill 版本为 <strong>1.2</strong>。Skill 版本和输出 JSON 的 Schema 版本分别管理；本版输出 Schema 为 1.5。</p>
+        </div>
+        <div class="grid three">
+          <article class="card">
+            <div class="num">1</div>
+            <h3>比较版本号</h3>
+            <p>Agent 读取已安装包和用户指定新版包的 <code>SKILL.md</code>，比较 <code>metadata.version</code>。</p>
+          </article>
+          <article class="card">
+            <div class="num">2</div>
+            <h3>新版更高才更新</h3>
+            <p>指定版本高于已安装版本时执行更新；版本相同或更低时保持现状并报告。</p>
+          </article>
+          <article class="card">
+            <div class="num">3</div>
+            <h3>整包直接替换</h3>
+            <p>更新时使用新版文件夹完整替换已安装文件夹，不逐文件比较，也不合并或保留旧文件。</p>
+          </article>
+        </div>
+        <div class="callout"><strong>注意：</strong>指定新版文件夹必须包含版本号和完整技能文件。新版缺少 <code>metadata.version</code> 时，Agent 会停止更新，避免误覆盖。</div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">FAQ</div>
+          <h2>常见问题</h2>
+        </div>
+        <details open><summary>“反推提示词”能还原原作者的原始 Prompt 吗？</summary><p>不能保证。不同提示词和参考素材可能生成相似结果。Skill 的目标是反推出更可能复现该镜头的生成条件，而不是声称找回唯一的原始 Prompt。</p></details>
+        <details><summary>提示词需要配合源视频使用吗？</summary><p>不需要。每条提示词必须自包含地描述画面内容和镜头内变化，可直接用于文字生成入口。</p></details>
+        <details><summary>长镜头会因为动作很多而被拆碎吗？</summary><p>通常不会。人物移动、摄影机运动、景别或对焦变化发生在连续拍摄内时，仍作为同一镜头，用开始状态、动作链、结束状态和镜头运动描述内部变化。</p></details>
+        <details><summary>再次分析同一个视频会重复工作吗？</summary><p>Skill 使用完整视频 SHA-256 查找已有资产。发现可用的同哈希结果时会先报告并优先复用，除非你明确要求重新分析。</p></details>
+        <details><summary>临时关键帧和代理视频会被自动删除吗？</summary><p>不会未经确认自动删除。交付后若存在临时文件，Skill 会告知目录并询问是否清理；正式的四个交付文件始终保留。</p></details>
+      </div>
+    </section>
+
+    <section id="safety">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">RIGHTS & PRIVACY</div>
+          <h2>权利与隐私提醒</h2>
+          <p>镜头复现不仅是技术问题，也涉及输入素材的授权范围。</p>
+        </div>
+        <div class="grid two">
+          <article class="card"><h3>内容权利</h3><p>可识别真人、品牌和受保护角色会优先转写为中性特征；平台水印、账号标识和非场景字幕不会作为应复刻内容进入提示词。</p></article>
+          <article class="card"><h3>敏感素材</h3><p>视频理解通常需要视觉模型读取抽取帧。处理私密、商业机密或其他敏感视频前，请确认当前运行环境和视觉服务的数据处理方式。</p></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">镜头解构 · 使用说明 · Skill v1.2 · Output Schema v1.5</div>
+  </footer>
+</body>
+</html>

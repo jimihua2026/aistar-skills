@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>星创导演 Skill｜使用说明</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #667085;
+      --line: #dfe5ef;
+      --paper: #f5f7fb;
+      --card: #ffffff;
+      --blue: #2457d6;
+      --blue-soft: #eaf0ff;
+      --violet: #6d45d6;
+      --green: #15795b;
+      --amber: #9a5b13;
+      --shadow: 0 18px 50px rgba(29, 47, 85, .09);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0, rgba(36,87,214,.11), transparent 30rem),
+        radial-gradient(circle at 92% 8%, rgba(109,69,214,.09), transparent 27rem),
+        var(--paper);
+      font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+      line-height: 1.72;
+    }
+    a { color: inherit; }
+    code, pre { font-family: Consolas, "SFMono-Regular", monospace; }
+    .wrap { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      border-bottom: 1px solid rgba(23,32,51,.09);
+      background: rgba(245,247,251,.92);
+      backdrop-filter: blur(14px);
+    }
+    .topbar-inner { min-height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { font-weight: 900; color: var(--blue); white-space: nowrap; }
+    nav { display: flex; gap: 18px; overflow-x: auto; scrollbar-width: none; }
+    nav::-webkit-scrollbar { display: none; }
+    nav a { color: var(--muted); font-size: 14px; text-decoration: none; white-space: nowrap; }
+    nav a:hover { color: var(--blue); }
+    .hero { padding: 78px 0 50px; display: grid; grid-template-columns: 1.35fr .65fr; gap: 38px; align-items: center; }
+    .eyebrow { color: var(--blue); font-size: 13px; font-weight: 900; letter-spacing: .1em; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.25; }
+    h1 { margin: 10px 0 18px; font-size: clamp(42px, 6vw, 70px); letter-spacing: -.045em; }
+    h2 { margin: 0 0 12px; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.03em; }
+    h3 { margin: 0 0 9px; font-size: 19px; }
+    .lead { max-width: 760px; margin: 0; color: var(--muted); font-size: 19px; }
+    .version-pill { display: inline-flex; margin-top: 24px; padding: 8px 13px; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-weight: 900; }
+    .hero-panel { padding: 28px; border-radius: 26px; color: #fff; background: linear-gradient(145deg, #1f4fca, #6d45d6); box-shadow: var(--shadow); }
+    .hero-panel strong { display: block; margin-bottom: 14px; font-size: 25px; }
+    .hero-panel ul { margin: 0; padding-left: 1.2em; color: rgba(255,255,255,.85); }
+    section { padding: 64px 0; scroll-margin-top: 72px; }
+    .section-head { max-width: 780px; margin-bottom: 28px; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 17px; }
+    .grid { display: grid; gap: 17px; }
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+    .card { padding: 24px; border: 1px solid rgba(23,32,51,.1); border-radius: var(--radius); background: rgba(255,255,255,.88); box-shadow: 0 8px 28px rgba(29,47,85,.05); }
+    .card p { margin: 0; color: var(--muted); }
+    .card ul { margin-bottom: 0; padding-left: 1.2em; color: var(--muted); }
+    .num { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 16px; border-radius: 12px; color: white; background: var(--blue); font-weight: 900; }
+    .mode { border-top: 5px solid var(--blue); }
+    .mode.fast { border-top-color: var(--violet); }
+    .tag { display: inline-flex; margin-bottom: 14px; padding: 5px 10px; border-radius: 999px; color: var(--blue); background: var(--blue-soft); font-size: 12px; font-weight: 900; }
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .flow div { min-height: 142px; padding: 18px; border: 1px solid var(--line); border-radius: 17px; background: var(--card); }
+    .flow b { display: block; margin-bottom: 7px; color: var(--blue); }
+    .flow span { color: var(--muted); font-size: 14px; }
+    .codebox { margin-top: 16px; padding: 18px 20px; overflow: auto; border-radius: 15px; color: #eef3ff; background: #17233c; white-space: pre-wrap; line-height: 1.65; }
+    .callout { margin-top: 18px; padding: 19px 21px; border-left: 5px solid var(--amber); border-radius: 14px; color: #654116; background: #fff4df; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--card); }
+    th, td { padding: 16px 18px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    tr:last-child td { border-bottom: 0; }
+    th { color: var(--ink); background: var(--blue-soft); font-size: 14px; }
+    td { color: var(--muted); }
+    td:first-child { color: var(--ink); font-weight: 800; white-space: nowrap; }
+    details { padding: 17px 19px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+    details + details { margin-top: 10px; }
+    summary { cursor: pointer; font-weight: 900; }
+    details p { margin: 10px 0 0; color: var(--muted); }
+    footer { margin-top: 36px; padding: 32px 0 44px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+    @media (max-width: 900px) {
+      .hero, .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 24px, 1120px); }
+      .topbar-inner { align-items: flex-start; flex-direction: column; gap: 8px; padding: 10px 0; }
+      nav { width: 100%; padding-bottom: 3px; }
+      .hero { padding-top: 44px; }
+      .flow { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; }
+      section { padding: 50px 0; }
+    }
+    @media print { .topbar { display: none; } body { background: white; } .card, .hero-panel { box-shadow: none; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">✦ 星创导演</div>
+      <nav aria-label="页面导航">
+        <a href="#start">快速开始</a>
+        <a href="#modes">工作模式</a>
+        <a href="#workflow">流程</a>
+        <a href="#input">输入与交付</a>
+        <a href="#actions">确认与修改</a>
+        <a href="#version">版本</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <div>
+        <div class="eyebrow">AI VIDEO DIRECTOR · TEAM GUIDE</div>
+        <h1>星创导演<br>使用说明</h1>
+        <p class="lead">把客户的文字、表格、文件、图片、语音或参考素材，逐步转化为可确认、可修改、可生产的视频方案与生成提示词。</p>
+        <div class="version-pill">当前稳定版本 · 1.1.0</div>
+      </div>
+      <aside class="hero-panel">
+        <strong>最终可以得到</strong>
+        <ul>
+          <li>结构化 Brief 与创作策略</li>
+          <li>生产型脚本与旁白规划</li>
+          <li>视觉资产与 AI 分镜</li>
+          <li>逐镜头生成提示词</li>
+          <li>制作路径、风险与最终生产包</li>
+        </ul>
+      </aside>
+    </div>
+
+    <section id="start">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">QUICK START</div><h2>三步开始一个项目</h2><p>不需要先把需求整理完整。原始材料可以直接交给星创导演，再逐步补齐关键决策。</p></div>
+        <div class="grid three">
+          <article class="card"><div class="num">1</div><h3>提供需求材料</h3><p>说明客户、传播目标、目标受众、视频用途、预计时长和已有素材；缺失内容可以标记待确认。</p></article>
+          <article class="card"><div class="num">2</div><h3>选择工作模式</h3><p>新类型或重要项目使用协作模式；同类型系列视频、已有成熟方法时使用极速模式。</p></article>
+          <article class="card"><div class="num">3</div><h3>确认当前阶段</h3><p>按 Brief、策略、脚本、分镜和 Prompt 逐步确认；已确认内容会锁定，避免后续被擅自改写。</p></article>
+        </div>
+        <div class="codebox">请使用“星创导演”处理这个视频项目。客户需求是：……
+已有材料：……
+目标时长：……
+交付时间：……</div>
+      </div>
+    </section>
+
+    <section id="modes">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">WORK MODES</div><h2>先选择工作模式</h2><p>收到新的制作需求后，星创导演会先判断是否已有项目上下文；新项目必须选择以下一种模式。</p></div>
+        <div class="grid two">
+          <article class="card mode"><div class="tag">A｜协作模式</div><h3>关键阶段逐步确认</h3><p>Brief、创作策略、脚本、分镜和 Prompt 分阶段提交并等待确认。适合首次制作、新视频类型、事实较多或重要项目。</p></article>
+          <article class="card mode fast"><div class="tag">B｜极速模式</div><h3>自动推进完整流程</h3><p>从 Brief 自动推进到最终生产包，只在关键事实缺失、严重冲突、高风险方案或无法合理推断时暂停。适合成熟的系列化项目。</p></article>
+        </div>
+        <div class="callout"><strong>选择建议：</strong>新类型、首次制作或需求不清晰时优先选择 A；已经验证过的同类型系列视频可以选择 B。</div>
+      </div>
+    </section>
+
+    <section id="workflow">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">WORKFLOW</div><h2>从需求到生产包</h2><p>每一层解决不同问题，避免需求、脚本、分镜和提示词混成一份无法追踪的文档。</p></div>
+        <div class="flow">
+          <div><b>01 · Brief</b><span>确认客户到底要什么，锁定事实、目标、受众和约束。</span></div>
+          <div><b>02 · 策略</b><span>判断视频类型、叙事结构、情绪、视觉方向和制作分工。</span></div>
+          <div><b>03 · 脚本</b><span>组织内容逻辑、段落、旁白、视觉意图和声音意图。</span></div>
+          <div><b>04 · 分镜</b><span>设计每个镜头的任务、动作、构图、运镜、连续性和风险。</span></div>
+          <div><b>05 · Prompt</b><span>生成自然语言导演指令，组装最终可执行生产包。</span></div>
+        </div>
+        <div class="callout"><strong>事实保护：</strong>公司、产品、人物、项目、数据、政策、地址、参数、案例和品牌属于 Fact Lock；无法确认时标记“待确认”，不得补造。</div>
+      </div>
+    </section>
+
+    <section id="input">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">INPUT &amp; DELIVERY</div><h2>可以提供什么，会交付什么</h2><p>材料越完整，首次输出越接近可生产状态；缺失但不影响方向的信息由 AI 标记为默认假设。</p></div>
+        <table>
+          <thead><tr><th>内容</th><th>输入示例</th><th>对应交付</th></tr></thead>
+          <tbody>
+            <tr><td>业务需求</td><td>客户目标、受众、核心信息、发布渠道、时长和预算</td><td>结构化 Brief、缺口和事实风险</td></tr>
+            <tr><td>文字与文件</td><td>介绍资料、表格、政策、产品参数、历史脚本</td><td>事实清单、创作策略、脚本与旁白</td></tr>
+            <tr><td>视觉素材</td><td>人物、产品、场景、Logo、参考图和参考视频</td><td>视觉资产编号、职责与连续性规则</td></tr>
+            <tr><td>创作偏好</td><td>风格、节奏、情绪、参考案例和禁用方向</td><td>分镜设计、Prompt 与制作建议</td></tr>
+          </tbody>
+        </table>
+        <div class="grid two" style="margin-top:18px">
+          <article class="card"><h3>每个镜头都会包含</h3><ul><li>镜头目的、时间和核心 Beat</li><li>主体、动作、场景、景别、构图与运镜</li><li>旁白、声音、参考资产和连续性</li><li>AI 制作方式、复杂度、风险和后期建议</li></ul></article>
+          <article class="card"><h3>硬性交付规则</h3><p>无论建议采用 AI、客户素材、实拍、素材库还是后期，每一个画面都必须提供对应的 AI 生成提示词；制作建议只说明更稳妥的执行方式，不代替 Prompt。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="actions">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">REVIEW &amp; CHANGE</div><h2>确认、修改与回退</h2><p>主要对象依次经历 DRAFT、REVIEW、LOCKED 和 COMPLETED。局部修改只影响必要范围。</p></div>
+        <div class="grid two">
+          <article class="card"><h3>确认</h3><p><strong>APPROVE：</strong>锁定当前阶段并停留。<br><strong>APPROVE_AND_CONTINUE：</strong>锁定当前阶段并立即进入下一阶段。</p></article>
+          <article class="card"><h3>修改</h3><p><strong>MODIFY：</strong>定位字段和影响范围，只修改必要内容并创建新版本。<br><strong>BACK：</strong>返回指定阶段，再检查受影响的下游内容。</p></article>
+        </div>
+        <div class="callout"><strong>已锁定内容：</strong>后续阶段不能擅自修改。新增业务要求影响已锁定内容时，先建立 Change Request，由用户决定是否回退。</div>
+      </div>
+    </section>
+
+    <section id="version">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">VERSION</div><h2>当前版本与更新</h2><p>当前稳定版本为 <strong>1.1.0</strong>。版本号以 <code>SKILL.md</code> 中的 <code>metadata.version</code> 为准。</p></div>
+        <div class="grid three">
+          <article class="card"><h3>主版本</h3><p>不兼容的流程、阶段职责或输出结构变化，例如 <code>1.x.x → 2.0.0</code>。</p></article>
+          <article class="card"><h3>次版本</h3><p>向后兼容的新能力或新模板，例如 <code>1.1.0 → 1.2.0</code>。</p></article>
+          <article class="card"><h3>修订版本</h3><p>修复、澄清和不改变使用方式的小调整，例如 <code>1.1.0 → 1.1.1</code>。</p></article>
+        </div>
+        <div class="callout"><strong>更新原则：</strong>只安装版本号更高的新版；更新 Base 层时保留每位成员的 <code>personal/</code> 内容。详细变化查看同目录下的 <code>更新说明.html</code>。</div>
+      </div>
+    </section>
+
+    <section id="faq">
+      <div class="wrap">
+        <div class="section-head"><div class="eyebrow">FAQ</div><h2>常见问题</h2></div>
+        <details open><summary>可以直接让它写 Prompt 吗？</summary><p>新项目原则上先完成 Brief、策略、脚本和分镜。只有上游信息已经明确且可追踪时，才适合快速进入 Prompt 阶段。</p></details>
+        <details><summary>为什么一定要区分事实和创意？</summary><p>业务数据、政策、产品参数和客户案例不能由 AI 自行美化或补造；运镜、构图、光影和视觉隐喻可以合理创作。</p></details>
+        <details><summary>不建议纯 AI 的镜头还会有提示词吗？</summary><p>会。每个画面都提供 AI 生成提示词，同时标注实拍、客户素材、素材库或后期接管建议。</p></details>
+        <details><summary>团队更新会覆盖个人偏好吗？</summary><p>不会。Base 更新必须保留 <code>personal/</code> 中的个人规则、偏好、案例与进化记录。</p></details>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap">星创导演 Skill · 使用说明 · 当前稳定版本 1.1.0</div></footer>
+</body>
+</html>
