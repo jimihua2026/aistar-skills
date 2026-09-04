@@ -1,17 +1,26 @@
-# Aistar Skills
+# Aistar Agent Skills
 
-面向 AI 视频创作的 Codex Skill 集合，包含创作策划与参考视频镜头解构两项能力。
+面向 AI 视频创作的开放 Agent Skills 集合，包含创作策划与参考视频镜头解构两项能力。当前版本已在 Codex 验证，也可用于支持 Agent Skills 目录结构的其他 AI Agent；不支持该标准的平台可以手动加载 `SKILL.md` 及其引用资源。
 
 ## Skills
 
 | Skill | 中文名称 | 当前版本 | 用途 |
 | --- | --- | --- | --- |
-| `aistar-director` | 星创导演 | 1.1.0 | 将文字、表格、文件、图片或语音需求转化为 Brief、创作策略、生产型脚本、AI Production Storyboard 和视频生成提示词。 |
-| `shot-deconstruction` | 镜头解构 | 1.2.0 | 拆解参考 AI 视频镜头，并为每个镜头生成可独立使用的纯文字复刻提示词。 |
+| `aistar-director` | 星创导演 | 1.1.1 | 将文字、表格、文件、图片或语音需求转化为 Brief、创作策略、生产型脚本、AI Production Storyboard 和视频生成提示词。 |
+| `shot-deconstruction` | 镜头解构 | 1.2.1 | 拆解参考 AI 视频镜头，并为每个镜头生成可独立使用的纯文字复刻提示词。 |
 
 ## 安装
 
-### 使用 Codex Skill Installer
+### 支持 Agent Skills 的平台
+
+1. 克隆或下载本仓库。
+2. 将所需 Skill 的完整目录放入宿主 Agent 规定的 Skill 目录。
+3. 保持 `SKILL.md`、`references/`、`templates/` 和其他引用资源的相对位置不变。
+4. 按宿主 Agent 的方式重新加载 Skill；必要时重启 Agent。
+
+不同 Agent 的安装目录和显式调用语法并不统一，应以对应平台的当前文档为准。
+
+### Codex
 
 仓库公开后，可在 Codex 中调用 `$skill-installer`，并要求安装：
 
@@ -19,38 +28,32 @@
 从 https://github.com/jimihua2026/aistar-skills 安装 aistar-director 和 shot-deconstruction
 ```
 
-### 手动安装
+也可以手动克隆仓库，再把所需 Skill 目录复制或链接到：
 
-1. 克隆仓库：
+```text
+$HOME/.agents/skills/
+```
 
-   ```powershell
-   git clone https://github.com/jimihua2026/aistar-skills.git
-   ```
+### 不支持 Agent Skills 的平台
 
-2. 将需要的 Skill 目录复制或链接到个人 Skill 目录：
-
-   ```text
-   $HOME/.agents/skills/
-   ```
-
-3. 如果 Skill 没有立即出现，重启 Codex。
+将目标 Skill 的 `SKILL.md` 作为项目指令或系统指令加载，并允许 Agent 按需读取同目录中的 `references/` 与 `templates/`。这种方式可以复用核心工作流，但自动触发、资源路由、长期个人层和工具调用能力取决于宿主平台。
 
 ## 使用
 
-在 Codex 中显式调用：
+不同平台可以显式选择 Skill、让 Agent 按 `description` 自动匹配，或直接要求 Agent 遵循对应 `SKILL.md`。Codex 示例：
 
 ```text
 $aistar-director 为这个企业宣传片项目整理 Brief 和生产型脚本
 $shot-deconstruction 拆解这段参考视频并生成逐镜头复刻提示词
 ```
 
-当请求与 Skill 的 `description` 匹配时，Codex 也可以自动选择相应 Skill。
+完整支持范围和降级行为见 [COMPATIBILITY.md](COMPATIBILITY.md)。
 
 ## 依赖与兼容性
 
 - `aistar-director` 以说明、参考资料和模板为主，不要求额外运行时。
 - `shot-deconstruction` 需要 FFmpeg 与 FFprobe，用于读取视频元数据、生成分析代理和抽取关键帧。
-- 两个 Skill 都需要在工作区写入结果文件；实际可用能力受 Codex 所在环境及权限配置影响。
+- 两个 Skill 都需要在工作区写入结果文件；实际可用能力受宿主 Agent 的文件、多模态、命令执行和权限机制影响。
 
 ## 个人数据
 
@@ -72,6 +75,7 @@ git pull --ff-only
 
 - 仓库级版本使用 `vX.Y.Z` 标签。
 - 每个 Skill 的版本记录在其 `SKILL.md` frontmatter 中。
+- 仓库更新记录见 [CHANGELOG.md](CHANGELOG.md)。
 - 普通问题和功能建议可通过 GitHub Issues 提交。
 - 安全问题请按照 [SECURITY.md](SECURITY.md) 处理。
 - 贡献代码前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
@@ -83,4 +87,3 @@ git pull --ff-only
 ## 许可证
 
 本项目使用 [MIT License](LICENSE)。
-

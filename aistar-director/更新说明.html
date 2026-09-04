@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>星创导演 Skill 1.1.0｜更新说明</title>
+<title>星创导演 Skill 1.1.1｜更新说明</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--ink:#182333;--muted:#657187;--blue:#2367d1;--line:#dfe5ef;--green:#16835b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 system-ui,-apple-system,"Microsoft YaHei",sans-serif}.wrap{max-width:980px;margin:0 auto;padding:48px 24px 72px}.eyebrow{color:var(--blue);font-size:12px;letter-spacing:.16em;font-weight:700}.hero{margin-bottom:28px}.hero h1{font-size:40px;line-height:1.2;margin:10px 0}.hero p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:0 4px 16px rgba(31,52,84,.05)}.card h2{font-size:18px;margin:0 0 10px}.card p{margin:0;color:var(--muted)}.wide{grid-column:1/-1}.tag{display:inline-block;background:#e8f0ff;color:var(--blue);padding:2px 9px;border-radius:999px;font-size:13px;margin:3px 4px 3px 0}.ok{color:var(--green);font-weight:700}li{margin:6px 0}.flow{font-weight:700;color:var(--blue);word-spacing:5px}@media(max-width:700px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.hero h1{font-size:32px}}
 </style>
 </head>
 <body><main class="wrap">
-<section class="hero"><div class="eyebrow">RELEASE NOTE · 1.1.0</div><h1>星创导演<br>版本更新说明</h1><p>当前稳定版本 1.1.0 · 面向团队内部的视频需求分析、分镜规划与 Seedance / 即梦提示词生产。</p></section>
+<section class="hero"><div class="eyebrow">RELEASE NOTE · 1.1.1</div><h1>星创导演<br>版本更新说明</h1><p>当前稳定版本 1.1.1 · 面向多种 AI Agent 的视频需求分析、分镜规划与 Seedance / 即梦提示词生产。</p></section>
 <section class="grid">
+<div class="card wide"><h2>1.1.1 · 跨 Agent 兼容</h2><ul><li>以宿主能力映射替代固定产品名和工具名。</li><li>增加手动加载、相对路径解析和能力缺失时的降级规则。</li><li>明确网络访问、软件安装、外部发送和文件覆盖仍需遵循宿主平台权限机制。</li><li>核心业务工作流、模板结构和 Personal Layer 保持不变。</li></ul></div>
 <div class="card wide"><h2>1.1.0 · 使用说明与版本管理</h2><ul><li>新增 <strong>使用说明.html</strong>，统一说明快速开始、工作模式、流程、交付和常用操作。</li><li>在 <strong>SKILL.md</strong> 中增加语义化版本号，当前定义为 1.1.0。</li><li>候选新版只有在版本号更高时才更新；Base 更新继续保留每位成员的 Personal 内容。</li><li>本次不改变原有工作模式、阶段状态、模板和业务规则。</li></ul></div>
 <div class="card wide"><h2>这次发布解决了什么</h2><p class="flow">需求 → 策略 → 脚本/旁白 → 资产 → 分镜 → 生成提示词 → 生产包</p><p>0822 将工作流从“生成提示词”进一步整理为可确认、可追踪、可复用的团队生产流程。</p></div>
 <div class="card"><h2>工作模式</h2><span class="tag">A 协作模式</span><span class="tag">B 极速模式</span><ul><li>新视频类型、首次制作或需求不清晰：建议 A。</li><li>已验证的同类型系列视频：可选择 B。</li><li>新需求开始时必须先询问模式。</li></ul></div>
