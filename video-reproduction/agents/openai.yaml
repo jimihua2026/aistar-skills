@@ -1,0 +1,4 @@
+interface:
+  display_name: "视频复刻"
+  short_description: "检查执行能力，拆解参考视频并替换元素，组织关键帧、生成任务与返修交付"
+  default_prompt: "使用 $video-reproduction 分析我的参考视频，保留镜头结构，替换指定元素，交付关键帧与视频生成任务。"

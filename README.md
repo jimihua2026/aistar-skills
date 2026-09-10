@@ -1,6 +1,6 @@
 # Aistar Agent Skills
 
-面向 AI 视频创作的开放 Agent Skills 集合，包含创作策划与参考视频镜头解构两项能力。当前版本已在 Codex 验证，也可用于支持 Agent Skills 目录结构的其他 AI Agent；不支持该标准的平台可以手动加载 `SKILL.md` 及其引用资源。
+面向 AI 视频创作的开放 Agent Skills 集合，包含创作策划、参考视频镜头解构与视频复刻三项能力。当前版本已在 Codex 验证，也可用于支持 Agent Skills 目录结构的其他 AI Agent；不支持该标准的平台可以手动加载 `SKILL.md` 及其引用资源。
 
 ## Skills
 
@@ -8,6 +8,7 @@
 | --- | --- | --- | --- |
 | `aistar-director` | 星创导演 | 1.1.1 | 将文字、表格、文件、图片或语音需求转化为 Brief、创作策略、生产型脚本、AI Production Storyboard 和视频生成提示词。 |
 | `shot-deconstruction` | 镜头解构 | 1.2.1 | 拆解参考 AI 视频镜头，并为每个镜头生成可独立使用的纯文字复刻提示词。 |
+| `video-reproduction` | 视频复刻 | 1.0.0 | 保留参考视频的构图、动作、运镜与转场，替换主体、元素或画风，并交付关键状态图指令、生成任务与验收规则。 |
 
 ## 安装
 
@@ -25,7 +26,7 @@
 仓库公开后，可在 Codex 中调用 `$skill-installer`，并要求安装：
 
 ```text
-从 https://github.com/jimihua2026/aistar-skills 安装 aistar-director 和 shot-deconstruction
+从 https://github.com/jimihua2026/aistar-skills 安装 aistar-director、shot-deconstruction 和 video-reproduction
 ```
 
 也可以手动克隆仓库，再把所需 Skill 目录复制或链接到：
@@ -45,6 +46,7 @@ $HOME/.agents/skills/
 ```text
 $aistar-director 为这个企业宣传片项目整理 Brief 和生产型脚本
 $shot-deconstruction 拆解这段参考视频并生成逐镜头复刻提示词
+$video-reproduction 保留这段参考视频的镜头结构，把主体和画风替换为指定方案
 ```
 
 完整支持范围和降级行为见 [COMPATIBILITY.md](COMPATIBILITY.md)。
@@ -53,7 +55,8 @@ $shot-deconstruction 拆解这段参考视频并生成逐镜头复刻提示词
 
 - `aistar-director` 以说明、参考资料和模板为主，不要求额外运行时。
 - `shot-deconstruction` 需要 FFmpeg 与 FFprobe，用于读取视频元数据、生成分析代理和抽取关键帧。
-- 两个 Skill 都需要在工作区写入结果文件；实际可用能力受宿主 Agent 的文件、多模态、命令执行和权限机制影响。
+- `video-reproduction` 需要访问参考视频或关键帧，并按交付范围使用图像、视频、剪辑或声音能力；缺失环节可以由人工或外部工具协作补齐。
+- 三个 Skill 都需要在工作区写入结果文件；实际可用能力受宿主 Agent 的文件、多模态、命令执行和权限机制影响。
 
 ## 个人数据
 

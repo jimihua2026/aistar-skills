@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "project_id": null,
+  "stage": "received",
+  "delivery_scope": "instructions",
+  "source": {
+    "path": null,
+    "sha256": null,
+    "duration_seconds": null,
+    "fps": null
+  },
+  "confirmed": {
+    "preserve": [],
+    "replace": [],
+    "use": null,
+    "audio_scope": null
+  },
+  "units": [],
+  "transition_groups": [],
+  "assets": [],
+  "tasks": [],
+  "attempts": [],
+  "unknowns": [],
+  "next_action": null,
+  "capability_check": {
+    "scope": null,
+    "route": null,
+    "status": "not_checked",
+    "capabilities": [],
+    "handoffs": [],
+    "unresolved": []
+  }
+}

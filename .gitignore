@@ -17,6 +17,8 @@ Desktop.ini
 *.bak
 *.swp
 ~$*
+__pycache__/
+*.py[cod]
 
 # Per-user Aistar data
 aistar-director/personal/*
