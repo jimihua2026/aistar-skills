@@ -401,7 +401,7 @@
           <li>连续性与不确定项说明</li>
           <li>HTML、Markdown、JSON 三种报告</li>
         </ul>
-        <div class="version">Skill v1.2 · Output Schema v1.5</div>
+        <div class="version">Skill v1.3.0 · Output Schema v1.5</div>
       </aside>
     </div>
 
@@ -487,11 +487,11 @@
         <div class="flow">
           <div class="flow-step"><strong>接收与预检</strong><span>确认视频可读取，记录文件名、哈希、时长、分辨率和帧率。</span></div>
           <div class="flow-step"><strong>视频观察</strong><span>浏览全片，按动态复杂度抽取关键帧和必要的连续帧。</span></div>
-          <div class="flow-step"><strong>镜头拆分</strong><span>根据硬切、转场和画面结构变化判断最终镜头边界。</span></div>
+          <div class="flow-step"><strong>镜头拆分</strong><span>复核候选前后连续帧与局部变化，区分切镜、镜内动作及持续转场；短镜头不因时长被删除。</span></div>
           <div class="flow-step"><strong>提示词重构</strong><span>按固定信息逻辑组织内容，再根据镜头动态复杂度压缩为自然语言导演指令。</span></div>
           <div class="flow-step"><strong>报告交付</strong><span>生成 HTML、Markdown、JSON 和复用索引，供人和 Agent 使用。</span></div>
         </div>
-        <div class="callout"><strong>关于高清素材：</strong>视频超过 1080p 或最长边超过 1920 像素时，Skill 会创建较小的分析代理来减少处理成本；原视频不会被修改。</div>
+        <div class="callout"><strong>独立使用：</strong>整包已包含边界复核规则，无需安装切镜检测库或其他 Skill。时间展示简化，内部保留证据精度；连续形变不直接增加镜头数。<br><strong>关于高清素材：</strong>视频超过 1080p 或最长边超过 1920 像素时，Skill 会创建较小的分析代理来减少处理成本；原视频不会被修改。</div>
       </div>
     </section>
 
@@ -583,7 +583,7 @@
         <div class="section-head">
           <div class="eyebrow">VERSION UPDATE</div>
           <h2>版本与整包更新</h2>
-          <p>当前 Skill 版本为 <strong>1.2</strong>。Skill 版本和输出 JSON 的 Schema 版本分别管理；本版输出 Schema 为 1.5。</p>
+          <p>当前 Skill 版本为 <strong>1.3.0</strong>。Skill 版本和输出 JSON 的 Schema 版本分别管理；本版输出 Schema 为 1.5。</p>
         </div>
         <div class="grid three">
           <article class="card">
@@ -636,7 +636,7 @@
   </main>
 
   <footer>
-    <div class="wrap">镜头解构 · 使用说明 · Skill v1.2 · Output Schema v1.5</div>
+    <div class="wrap">镜头解构 · 使用说明 · Skill v1.3.0 · Output Schema v1.5</div>
   </footer>
 </body>
 </html>
