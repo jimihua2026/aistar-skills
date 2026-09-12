@@ -44,6 +44,18 @@
 
 帧号与高精度时间保留在证据记录。用户生成提示词使用可执行的动作顺序与合理时间分段，不把5.041667秒或人工估计的精确百分比机械写成平台能保证的控制参数。平台5秒设置输出121帧等差异按实际输出记录，不单凭毫秒差判为失败；严格节奏要求在剪辑阶段验收。
 
+## 边界与来源镜头（1.1.0 技能扩展）
+
+项目 Schema 仍为1.0，已有必填字段不变；以下为实际分析时填写的可选扩展，旧项目按下一步需要补充，不制造空证据。
+
+- `units[].source_shot_id`：本项目内的源剪辑镜头标识。一个源镜头拆成多个phase时共享该标识；直接完整制作的shot也写其标识。报告镜头数按已确认源镜头统计，单位数和生成任务数另列。边界暂定时数量也标为暂定。
+- `units[].boundary_review`：本单元起点的`status`（accepted/provisional）、`reason`、`method`、`evidence_times_seconds`；精度写入已有`boundary_precision`，新增记录使用frame_verified、estimated或unresolved。phase在镜内的起点method标为action_phase或production_split，不能声称是切镜；若phase恰从源镜头边界开始，继承该边界的实际依据；源片起点用source_start。方法名和精度必须符合实际证据。
+- `transition_groups[]`可增加`start_seconds`、`end_seconds`、`split_seconds`、`split_reason`、`before_state`、`after_state`和有证据的`intermediate_states`。区间按参考片时间，引用已有unit_ids，不重复累计时长。不能确认的范围留null并记unknowns。
+- 数值时间不先舍入；展示保留两位小数。unit采用左闭右开区间，共用邻接边界。精确帧号和时间戳可附在证据中，但需注明源视频和计数基准；可变帧率、代理映射与持续转场按本包[边界复核协议](boundary-review.md)处理。
+- 边界理由与关键争议摘要随制作包保存；转场关键状态只有实际抽取并保留时才引用assets，不引用将被清理的临时图。复用按源哈希、分析范围与证据适用性判断。
+
+检查上述扩展时，核对source_shot_id对应关系、转场范围是否位于参考片内、split是否属于转场区间以及与单元边界的一致性。现有结构检查脚本未校验这些扩展；通过脚本不代表它们或逐帧边界已经验证。严格剪辑时按源时间基准复核，不把脚本的时间容差当作精度保证。
+
 ## 检查脚本
 
 运行`python scripts/validate_project.py /项目目录/project.json`检查时间覆盖、id、任务与素材引用、已就绪资产可读性、验收证据。该脚本不验证视觉质量，不能代替观察或用户验收。

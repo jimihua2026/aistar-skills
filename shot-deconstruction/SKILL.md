@@ -2,7 +2,7 @@
 name: shot-deconstruction
 description: 中文名称：镜头解构。将参考 AI 视频拆分为镜头，并为每个镜头生成可独立使用的纯文字复刻提示词。用户提到“拆解参考视频”“分析 AI 短片镜头”“反推视频提示词”“复刻某段视频画面”“镜头-提示词映射”，或需要把参考镜头沉淀为可复用资产时，使用此 Skill。
 metadata:
-  version: "1.2.1"
+  version: "1.3.0"
   compatibility: 支持能够读取 Markdown 与相对路径资源、执行本地命令、查看视频帧并写入工作区的 AI Agent。需要 FFmpeg 与 FFprobe；只有用户明确要求分析音乐或旁白时，才需要音频识别与语音转写能力。
 ---
 
@@ -22,7 +22,7 @@ metadata:
 
 ## 版本与整包更新
 
-当前 Skill 版本读取 `SKILL.md` frontmatter 中的 `metadata.version`，本版为 `1.2.1`。输出文件中的 `schema_version` 是数据结构版本，与 Skill 版本分别管理。
+当前 Skill 版本读取 `SKILL.md` frontmatter 中的 `metadata.version`，本版为 `1.3.0`。输出文件中的 `schema_version` 是数据结构版本，与 Skill 版本分别管理。
 
 当用户指定一个新版 Skill 文件夹并要求更新已安装版本时：
 
@@ -37,7 +37,7 @@ metadata:
 - 分开保存观察事实、镜头判断与提示词重构；不宣称找回原始提示词。
 - 每个镜头只生成一种可独立使用的中文纯文字复刻提示词。
 - 提示词使用稳定的信息逻辑，但按镜头动态复杂度调节篇幅与时间表达，不把所有镜头机械套入同一长模板。
-- 先粗后细，按动态复杂度增加取样，不增加独立运动时间轴，也不对所有视频固定高密度采样。
+- 先粗后细，按动态复杂度增加取样，不增加独立运动时间轴，也不对所有视频固定高密度采样。切镜候选按本包的边界复核协议定稿；连续形变阶段不直接计为剪辑镜头。
 - 用视频 SHA-256 作为复用键；已有同哈希资产时优先报告并复用，除非用户要求重新分析。
 - 不把可识别真人、品牌、受保护角色、平台叠层或明显生成瑕疵作为应复刻的核心特征。
 
@@ -68,7 +68,7 @@ metadata:
 
 ## 2. 观察、拆镜与纯文字提示词重构
 
-1. 读取 `references/video-inspection.md`，形成带时间锚点的观察记录。
+1. 读取 `references/video-inspection.md`，形成带时间锚点的观察记录；定稿边界前读取本包 [候选边界与连续性复核](references/boundary-review.md)，核对局部变化、短镜头与持续转场。
 2. 读取 `references/shot-analysis.md`，把候选区间判定为最终镜头。首镜头从 `0.00` 开始，末镜头结束于实际时长，相邻镜头不得留空或重叠。
 3. 读取 `references/prompt-reconstruction.md`，从已验证观察生成 `text_to_video_prompt_zh`。提示词不依赖参考素材，按“主体与核心动作 → 场景空间 → 动作时序 → 摄影机 → 光影风格 → 可选声音 → 稳定约束”的逻辑组织，并按镜头复杂度压缩为自然语言导演指令。
 4. 不增加独立运动时间轴。用 `start_state`、`action_chain`、`end_state` 和 `camera_motion` 表达镜头内部变化；不确定项写入 `uncertainties`。
@@ -135,7 +135,11 @@ video-deconstruction-assets/
 
 `analysis.md` 固定包含“视频信息”“全局视觉观察”“解构方法摘要”“镜头—提示词映射”“连续性、不确定项与权利提示”。用户要求音频分析时再增加“声音观察”。
 
-`manifest.json` 至少记录 schema/技能版本、创建时间、输入 SHA-256，以及三个分析文件的路径。
+`manifest.json` 至少记录 schema/技能版本、创建时间、输入 SHA-256，以及三个分析文件的路径。复用前检查分析范围及边界证据是否满足本次要求；旧资产仅缺精度或转场信息时补查对应部分。
+
+Schema 1.5 的核心字段保持不变。新分析在每个镜头增加 `boundary_review`，记录起点的 `status`（accepted/provisional）、`reason`、`method`、`precision`（frame_verified/estimated/unresolved）和实际 `evidence_times_seconds`；源片起点用 method=source_start，precision 按实际证据填写。必要时记录不确定范围与注明计数基准的源帧号。片尾覆盖依据写入方法摘要，不伪装为一次切镜。
+
+确有持续转场时，可增加顶层 `transitions`：`from_shot_id`、`to_shot_id`、`start_seconds`、`end_seconds`、`split_seconds`、`split_reason`、`before_state`、`after_state`；区间未能确认时写入不确定项，不编造数值。它们引用 shots，不另算镜头数或时长。Markdown/HTML 在对应镜头卡片展示边界摘要、转场范围与暂定项，无需展示全部候选。
 
 ### `analysis.html` 图文对照报告
 
@@ -159,7 +163,7 @@ HTML 是最重要的用户交付，必须离线可打开且不依赖外部资源
 - 标准动作镜头明确开始状态、动作过程和结束状态，复杂连续动作按触发、展开、完成表达；
 - 稳定性要求优先使用少量正向约束，不堆叠通用负面词；
 - 只有存在经验证的音频观察时，提示词才包含声音内容；
-- `analysis.json` 可解析，时间文本与数值时间一致；
+- `analysis.json` 可解析，时间文本是未舍入数值时间的展示形式；边界证据精度如实标注，持续转场不重复计时，动作阶段不增加剪辑镜头数；
 - `analysis.html` 包含每个镜头的截图或明确不可用原因，并清晰展示纯文字复刻提示词；
 - `analysis.md`、`analysis.json`、`analysis.html` 和 `manifest.json` 均已生成；
 - 未经用户要求，不执行音乐或旁白分析。
